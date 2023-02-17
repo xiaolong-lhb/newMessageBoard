@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>注册界面</title>
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+        }
+        div a {
+            text-decoration: none;           
+        }
+        #reg {
+            width:500px;
+            height: 700px;
+            text-align: center;
+            margin: 100px auto;
+        }
+        #reg div {
+            padding-top: 30px;
+            display:flex;
+            position: relative;
+        }
+        #reg div label {
+            flex: 1;
+            text-align: right;
+        }
+        #reg div input {
+            flex: 1;
+        }
+        #reg div:last-child span{
+            flex: 1;
+        }
+        #reg div:last-child span button{
+            width: 100px;
+            height: 30px; 
+            background-color: rgba(0, 153, 255, 0.692);
+            border-radius: 10px;
+            border: none;
+            color: #fff;
+            left: 0px;
+        }
+        #reg div:last-child .tex{
+            position: absolute;
+            bottom: 0px;
+            right: 0px;
+        }
+    </style>
+    <script src="../vue.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/axios/1.2.5/axios.js"></script>
+</head>
+<body>
+    <div id="reg">
+            <div><label>账号名：</label><input v-model="username"/></div>
+            <div><label>真实姓名：</label><input v-model="realname"/></div>
+            <div><label>密码：</label><input v-model="psw"/></div>
+            <div><label>确认密码：</label><input v-model="comfirmpsw"/></div>
+            <div><span><button @click="goRegist">注册</button></span><span class="tex">已有账号，选择 <a href="login.html">登录</a></span></div>
+    </div>
+    <script>
+        const { createApp } = Vue
+        const app = createApp({
+            data(){
+                return {
+                    username:'',
+                    realname:'',
+                    psw:'',
+                    comfirmpsw:''
+                }
+            },
+            methods: {
+                goRegist(){
+                    if(this.psw !== this.comfirmpsw){
+                        alert('两次输入的密码不一致')
+                    }
+                    else{
+                        axios({
+                            method:'post',
+                            url:'http://127.0.0.1/registweb',
+                            data:{
+                                username:this.username,
+                                realname:this.realname,
+                                psw:this.psw
+                            }
+                        }).then((response)=>{
+                            if(response.data.status){
+                                alert('用户注册成功，现在返回登录页面')
+                                window.location.href = 'login.html'
+                            }
+                            else {
+                                alert('用户注册失败，请重新输入')
+                                this.username = '',
+                                this.realname = '',
+                                this.psw = ''
+                                this.comfirmpsw = ''
+                            }
+                        })
+                    }
+                }
+            },
+        })
+        app.mount('#reg')
+    </script>
+</body>
+</html>
