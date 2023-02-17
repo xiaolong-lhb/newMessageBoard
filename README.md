@@ -12,3 +12,11 @@ default charset=utf8
 comments = '用户信息表'
 
 
+# 需要先下载vuejs到本地
+# 需要用到的包：require("express")
+require("express-session")
+require('jsonwebtoken')
+require('express-jwt')
+require('cors')
+require('./connectDB.js')
+
