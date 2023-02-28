@@ -12,11 +12,5 @@ default charset=utf8
 comments = '用户信息表'
 
 
-# 需要先下载vuejs到本地
-# 需要用到的包：require("express")
-require("express-session")
-require('jsonwebtoken')
-require('express-jwt')
-require('cors')
-require('./connectDB.js')
+# 使用vue3创建的留言板登录注册与主页简单界面
 
