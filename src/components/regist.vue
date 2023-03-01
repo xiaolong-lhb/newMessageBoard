@@ -5,7 +5,7 @@
     <div><label>密码：</label><input v-model="user.psw" /></div>
     <div><label>确认密码：</label><input v-model="user.comfirmpsw" /></div>
     <div>
-      <span><button @click="goRegist">注册</button></span
+      <span><button @click="goRegist">注册、、、</button></span
       ><span class="tex"
         >已有账号，选择 <RouterLink to="/Login" id="routerlogin">登录</RouterLink></span
       >
