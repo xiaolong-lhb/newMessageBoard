@@ -8,7 +8,7 @@ const router = createRouter({
   routes: [
     {
 
-      // test
+      // test go to
       path: '/',
       name: 'home',
       component: MessageMain
