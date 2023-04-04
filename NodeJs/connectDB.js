@@ -21,15 +21,19 @@ module.exports = {
                     if(err) reject(err)
                     else{
                         //console.log(results)
+                        // console.log(results.realname)
+                        // const resultJson = JSON.parse(JSON.stringify(results))
+                        // console.log(resultJson[0].realname)
+                        //console.log(results[0].realname)
                         resolve(results)
                     }
                 })
             })
         },
     // 插入数据库函数
-    db_Insert(userinfo){
+    db_Insert(sql,userinfo){
         return new Promise((resolve,reject)=>{
-            db.query('insert into users set ?',userinfo,(err,results)=>{
+            db.query(sql,userinfo,(err,results)=>{
                 if(err){
                     console.log(err.message)
                     reject(err.message)
@@ -39,9 +43,9 @@ module.exports = {
         })
     },
     // 更新数据库函数
-    db_Update(userinfo){
+    db_Update(sql,userinfo){
         return new Promise((resolve,reject)=>{
-            db.query('update users set ? where id=?',userinfo,(err,results)=>{
+            db.query(sql,userinfo,(err,results)=>{
                 if(err){
                     // console.log(err.message)
                     reject(err.message)

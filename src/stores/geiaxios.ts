@@ -3,9 +3,9 @@ import axios from 'axios'
 async function getres(userinfo: any, url: string) {
   const p = await axios({
     method: 'get',
-    url: 'http://127.0.0.1' + url,
-    data: {
-      userinfo
+    url: 'http://localhost' + url,
+    params: {
+      id: 1
     },
     headers: {
       Authorization: window.localStorage.token
@@ -20,7 +20,7 @@ async function getres(userinfo: any, url: string) {
 async function postres(userinfo: any, url: string) {
   const p = await axios({
     method: 'post',
-    url: 'http://127.0.0.1' + url,
+    url: 'http://localhost' + url,
     data: {
       ...userinfo
     },
@@ -30,6 +30,7 @@ async function postres(userinfo: any, url: string) {
   }).then((response) => {
     return response
   })
+  console.log('post方法被调用了')
   return await p.data
 }
 

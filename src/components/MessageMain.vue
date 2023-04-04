@@ -1,24 +1,24 @@
 <template>
   <div id="contain">
     <div class="Mheader">
-      <button>查看留言列表</button>
-      <button>个人信息</button>
+      <button @click="goMessageList">查看留言列表</button>
+      <button @click="toPersonInfo">个人信息</button>
     </div>
     <div class="Mmain">
       <div>
         <label for="division">留言分类：</label>
-        <select>
-          <option>情感</option>
-          <option>时政</option>
-          <option>搞笑</option>
-          <option>美食</option>
+        <select v-model="listType">
+          <option value="情感">情感</option>
+          <option value="时政">时政</option>
+          <option value="搞笑">搞笑</option>
+          <option value="美食">美食</option>
         </select>
       </div>
-      <div><label for="title">标题：</label><input type="text" /></div>
-      <div><label for="content">内容：</label><textarea></textarea></div>
+      <div><label for="title">标题：</label><input type="text" v-model="title" /></div>
+      <div><label for="content">内容：</label><textarea v-model="content"></textarea></div>
     </div>
     <div class="Mfooter">
-      <button>提交留言</button>
+      <button @click="submitList">提交留言</button>
       <button>重置</button>
     </div>
   </div>
@@ -26,20 +26,81 @@
 
 <script lang="ts">
 import getaxios from '../stores/geiaxios'
-import { useRouter } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
+import { ref } from 'vue'
+import gettime from '../stores/getTime'
 export default {
   name: 'MessageMain',
   setup() {
     const router = useRouter()
-    getaxios.getres('', './islogin').then((response) => {
+    let username = ref('')
+    let listType = ref('情感')
+    let title = ref('')
+    let content = ref('')
+    // // 打印时间
+    // console.log(gettime.getTime())
+    // // 打印接收到的参数
+    // console.log(route.query.username)
+    getaxios.getres('', '/islogin').then((response) => {
       if (response.status === 200) {
-        alert('欢迎来到留言板！！')
+        //alert('欢迎来到留言板！！')
       } else {
         alert(response.message)
         router.push('./Login')
       }
     })
-    return {}
+    function goMessageList() {
+      router.push('./MessageList')
+    }
+    function submitList() {
+      if (title.value === '') {
+        alert('标题不可为空！！')
+      } else if (content.value === '') {
+        alert('内容不可为空！！')
+      } else {
+        getaxios.getres('', './submitList').then((response) => {
+          username.value = response.username
+          getaxios
+            .postres(
+              {
+                messagePerson: username.value,
+                messageType: listType.value,
+                messageTitle: title.value,
+                messagecontent: content.value,
+                messageTime: gettime.getTime(),
+                messageLikes: 0,
+                messageReplys: 0
+              },
+              './submitList'
+            )
+            .then((response) => {
+              if (response.status === 200) {
+                alert(response.message)
+                router.push('./MessageList')
+              } else if (response.status === 404) {
+                alert('未知错误，请重新输入留言内容')
+              } else {
+                alert(response.message)
+                router.push('./Login')
+              }
+            })
+        })
+      }
+    }
+    // 跳转到个人信息界面
+    function toPersonInfo() {
+      router.push({
+        path: '/PersonInfo'
+      })
+    }
+    return {
+      goMessageList,
+      listType,
+      title,
+      content,
+      submitList,
+      toPersonInfo
+    }
   }
 }
 </script>
@@ -106,7 +167,8 @@ export default {
 .Mmain div:nth-child(2) input {
   height: 20px;
   width: 400px;
-  text-align: center;
+  font-size: 16px;
+  /* text-align: center; */
 }
 .Mmain div:last-child {
   height: 200px;
@@ -117,7 +179,8 @@ export default {
 .Mmain div:last-child textarea {
   height: 150px;
   width: 500px;
-  text-align: center;
+  font-size: 16px;
+  /* text-align: center; */
 }
 .Mfooter {
   width: 400px;

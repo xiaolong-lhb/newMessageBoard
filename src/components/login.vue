@@ -14,7 +14,6 @@
 <script lang="ts">
 import { reactive } from 'vue'
 import getaxios from '../stores/geiaxios'
-import axios from 'axios'
 import { useRouter } from 'vue-router'
 export default {
   name: 'login',
@@ -26,6 +25,12 @@ export default {
     })
     let url = ''
     function goLogin() {
+      // router.push({
+      //   path: '/',
+      //   query: {
+      //     username: user.username
+      //   }
+      // })
       // axios({
       //   method:'post',
       //   url:'http://127.0.0.1/loginweb',
@@ -45,18 +50,18 @@ export default {
       //       alert(response.data.msg)
       //   }else alert(response.data.msg)
       // })
-      getaxios
-        .postres({ username: user.username, psw: user.psw }, './loginweb')
-        .then((response) => {
-          if (response.status === 0) {
-            alert(`${user.username}${response.msg}`)
-            //window.localStorage.removeItem('token')
-            window.localStorage.setItem('token', response.token)
-            router.push('./')
-          } else if (response.status === 1) {
-            alert(response.msg)
-          } else alert(response.msg)
-        })
+      getaxios.postres({ username: user.username, psw: user.psw }, '/loginweb').then((response) => {
+        if (response.status === 0) {
+          alert(`${user.username}${response.msg}`)
+          //window.localStorage.removeItem('token')
+          window.localStorage.setItem('token', response.token)
+          router.push({
+            path: '/'
+          })
+        } else if (response.status === 1) {
+          alert(response.msg)
+        } else alert(response.msg)
+      })
     }
     return {
       url,
